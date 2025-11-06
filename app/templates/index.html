@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Buscar Habitaciones</h2>
+<form method="post" action="{{ url_for('search') }}">
+    <label for="start_date">Fecha de inicio</label>
+    <input type="date" name="start_date" required>
+
+    <label for="end_date">Fecha de fin</label>
+    <input type="date" name="end_date" required>
+
+    <label for="room_type">Tipo de habitación</label>
+    <select name="room_type">
+        <option value="simple">Simple</option>
+        <option value="doble">Doble</option>
+        <option value="suite">Suite</option>
+    </select>
+
+    <button type="submit">Buscar</button>
+</form>
+{% endblock %}

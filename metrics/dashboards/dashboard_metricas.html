@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Métricas - Testing Hotel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.15), transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(20, 184, 166, 0.15), transparent 50%);
+            animation: particleMove 20s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes particleMove {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header Section */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .timestamp {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 50px;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .metric-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .metric-card:hover::before {
+            opacity: 1;
+        }
+
+        .metric-card h3 {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card .value {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .metric-card .unit {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .chart-container:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .chart-container img {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Criteria Section */
+        .criterios-section {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            animation: fadeInUp 0.8s ease-out 0.6s backwards;
+        }
+
+        .criterios-section h2 {
+            color: #fff;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .criterios-section > p {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+        }
+
+        .criterio {
+            padding: 18px 24px;
+            margin: 12px 0;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+        }
+
+        .criterio:hover {
+            transform: translateX(8px);
+        }
+
+        .criterio.pass {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.15) 100%);
+            border-left: 5px solid #10b981;
+            color: #d1fae5;
+        }
+
+        .criterio.fail {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(220, 38, 38, 0.15) 100%);
+            border-left: 5px solid #ef4444;
+            color: #fee2e2;
+        }
+
+        .criterio span:last-child {
+            font-weight: 900;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            margin-top: 35px;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        .status-badge.approved {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff;
+            border: 2px solid #d1fae5;
+        }
+
+        .status-badge.rejected {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #fff;
+            border: 2px solid #fee2e2;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 16px;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .metric-card {
+                padding: 20px;
+            }
+
+            .metric-card .value {
+                font-size: 36px;
+            }
+
+            .criterios-section {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+        }
+
+        /* Loading Animation */
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        .metric-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        /* Glassmorphism effect enhancement */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Dashboard de Métricas de Testing</h1>
+            <p class="timestamp">Sistema de Reservas de Hotel | Generado: 2025-11-05 19:44:33</p>
+        </div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>Cobertura de Pruebas</h3>
+                <div class="value">96.0<span class="unit">%</span></div>
+            </div>
+            <div class="metric-card">
+                <h3>Tasa de Resolución</h3>
+                <div class="value">56.6<span class="unit">%</span></div>
+            </div>
+            <div class="metric-card">
+                <h3>Eficiencia de Pruebas</h3>
+                <div class="value">95.0<span class="unit">%</span></div>
+            </div>
+            <div class="metric-card">
+                <h3>Índice de Estabilidad</h3>
+                <div class="value">80<span class="unit">%</span></div>
+            </div>
+            <div class="metric-card">
+                <h3>Densidad Críticos</h3>
+                <div class="value">8.8<span class="unit">%</span></div>
+            </div>
+            <div class="metric-card">
+                <h3>Tiempo Promedio</h3>
+                <div class="value">4.02<span class="unit">días</span></div>
+            </div>
+            <div class="metric-card">
+                <h3>Tasa de Retest</h3>
+                <div class="value">25.0<span class="unit">%</span></div>
+            </div>
+            <div class="metric-card">
+                <h3>Tendencia</h3>
+                <div class="value" style="font-size: 24px;">ESTABLE ~</div>
+            </div>
+        </div>
+        
+        <div class="charts-grid">
+            <div class="chart-container">
+                <img src="../figs/trend.png" alt="Tendencia">
+            </div>
+            <div class="chart-container">
+                <img src="../figs/severity.png" alt="Severidad">
+            </div>
+            <div class="chart-container">
+                <img src="../figs/status.png" alt="Estado">
+            </div>
+            <div class="chart-container">
+                <img src="../figs/semaforo.png" alt="Semáforo">
+            </div>
+        </div>
+        
+        <div class="criterios-section">
+            <h2>🎯 Criterios de Salida (Exit Criteria)</h2>
+            <p><strong>Cumplidos: 6/8 (75.0%)</strong></p>
+            
+            <div class="criterio pass">
+                <span>1. Cobertura de pruebas >= 90%</span>
+                <span>✓ PASS</span>
+            </div>
+            <div class="criterio fail">
+                <span>2. Tasa de resolución >= 85%</span>
+                <span>✗ FAIL</span>
+            </div>
+            <div class="criterio pass">
+                <span>3. Sin defectos críticos abiertos</span>
+                <span>✓ PASS</span>
+            </div>
+            <div class="criterio pass">
+                <span>4. Defectos high <= 2 abiertos</span>
+                <span>✓ PASS</span>
+            </div>
+            <div class="criterio pass">
+                <span>5. Tiempo promedio resolución <= 5 días</span>
+                <span>✓ PASS</span>
+            </div>
+            <div class="criterio pass">
+                <span>6. Eficiencia de pruebas >= 80%</span>
+                <span>✓ PASS</span>
+            </div>
+            <div class="criterio pass">
+                <span>7. Índice de estabilidad >= 70</span>
+                <span>✓ PASS</span>
+            </div>
+            <div class="criterio fail">
+                <span>8. Tendencia de defectos descendente</span>
+                <span>✗ FAIL</span>
+            </div>
+            
+            <div class="status-badge approved">
+                ✓ APROBADO PARA PRODUCCIÓN
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<h2>Pago</h2><form method='post' action='{{ url_for('pay') }}'><input type='hidden' name='booking_id' value='{{ booking_id }}'><button>Pagar</button></form>{% endblock %}

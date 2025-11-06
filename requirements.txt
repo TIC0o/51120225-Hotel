@@ -1,0 +1,7 @@
+flask
+werkzeug
+pandas
+numpy
+matplotlib
+pytest
+pytest-html

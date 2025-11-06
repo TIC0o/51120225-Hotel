@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Resultados de la Búsqueda</h2>
+
+{% if available_rooms %}
+    <h3>Habitaciones Disponibles</h3>
+    <ul>
+    {% for room in available_rooms %}
+        <li>
+            {{ room['room_number'] }} - {{ room['room_type_name'] }} - ${{ room['price'] }}
+            <form action="{{ url_for('book') }}" method="post">
+                <input type="hidden" name="room_id" value="{{ room['room_id'] }}">
+                <input type="hidden" name="start_date" value="{{ start_date }}">
+                <input type="hidden" name="end_date" value="{{ end_date }}">
+                <button type="submit">Reservar</button>
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay habitaciones disponibles.</p>
+{% endif %}
+
+{% if occupied_rooms %}
+    <h3>Habitaciones Ocupadas</h3>
+    <ul>
+    {% for room_number in occupied_rooms %}
+        <li>Habitación {{ room_number }} - Ocupada</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}

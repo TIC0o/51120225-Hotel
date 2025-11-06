@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-11-05T19:44:33.914018",
+  "metricas": {
+    "cobertura_pruebas": 96.0,
+    "tasa_defectos": 50.0,
+    "densidad_criticos": 8.8,
+    "tasa_resolucion": 56.6,
+    "tiempo_promedio_dias": 4.02,
+    "eficiencia_pruebas": 95.0,
+    "tasa_retest": 25.0,
+    "indice_estabilidad": 80,
+    "tendencia_defectos": "ESTABLE ~"
+  },
+  "criterios_salida": {
+    "cumplidos": 6,
+    "total": 8,
+    "porcentaje": 75.0,
+    "aprobado": true,
+    "detalle": {
+      "1. Cobertura de pruebas >= 90%": true,
+      "2. Tasa de resolución >= 85%": false,
+      "3. Sin defectos críticos abiertos": true,
+      "4. Defectos high <= 2 abiertos": true,
+      "5. Tiempo promedio resolución <= 5 días": true,
+      "6. Eficiencia de pruebas >= 80%": true,
+      "7. Índice de estabilidad >= 70": true,
+      "8. Tendencia de defectos descendente": false
+    }
+  }
+}
